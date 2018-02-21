@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Init log file, if not existing
+# Init log file
+rm logs/output.log
 touch logs/output.log
 
 shopt -s nullglob
