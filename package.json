@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "keythereum": "^0.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/provotum/setup.git"
+  },
+  "author": "Christian Killer, Raphael Matile",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/provotum/setup/issues"
+  },
+  "homepage": "https://github.com/provotum/setup#readme",
+  "dependencies": {
+    "dotenv": "^5.0.0"
+  }
+}
