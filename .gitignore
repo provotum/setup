@@ -1,8 +1,7 @@
-.idea
-.DS_Store
 *.log
 .idea
 .DS_Store
+logs/output.log
 
 # Logs
 logs
