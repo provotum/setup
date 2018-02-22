@@ -11,6 +11,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Generated files
+genesis.json
+privatekeys.json
+
 # Runtime data
 pids
 *.pid
