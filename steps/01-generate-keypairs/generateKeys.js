@@ -38,6 +38,8 @@ function generateJSONForIdentityProvider(privateKeysArray) {
     for (var i = 0; i < privateKeysArray.length; i++) {
         privateKeyObj[i] = privateKeysArray[i];
     }
+
+    // TODO Curl to mock-identity-provider
     var privateKeyJson = JSON.stringify(privateKeyObj);
     fs.writeFile('privatekeys.json', privateKeyJson);
 }
