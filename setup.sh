@@ -5,12 +5,12 @@ rm logs/output.log
 touch logs/output.log
 
 shopt -s nullglob
-for file in steps/*/**
+for dir in steps/*/
 do
     echo "#######################################"
-    echo "Executing step $file"
+    echo "Executing step $dir"
     echo "#######################################"
-    ./${file}
+    ./${dir}/run.sh
 
     last_exit_status=$?
     if [[ ${last_exit_status} -ne "0" ]]; then
