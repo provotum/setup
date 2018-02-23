@@ -1,3 +1,7 @@
 [submodule "resources/eth-contracts"]
 	path = resources/eth-contracts
 	url = git@github.com:provotum/eth-contracts.git
+[submodule "resources/eth-private-net"]
+	path = resources/eth-private-net
+	url = git@github.com:provotum/eth-private-net.git
+	branch = setup
