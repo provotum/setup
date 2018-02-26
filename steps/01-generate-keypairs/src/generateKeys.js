@@ -3,6 +3,7 @@
 require('dotenv').config();
 var fs = require("fs");
 var keythereum = require("keythereum");
+var axios = require("axios");
 const password = "./password.sec";
 
 generateKeys();
@@ -24,6 +25,9 @@ function generateKeys() {
         addressArray.push(readableAddress);
         privateKeysArray.push(dk.privateKey.toString('hex'));
 
+        // TODO Export the first 5 keystores to the individual folders for use with the eth-private-net
+        // TODO folders node1,node2,node3,node4,node5 in /resources/eth-private-net
+
         //var keyObject = keythereum.dump(password, dk.privateKey, dk.salt, dk.iv);
         //keythereum.exportToFile(keyObject);
     }
@@ -34,16 +38,34 @@ function generateKeys() {
 }
 
 function generateJSONForIdentityProvider(privateKeysArray) {
-    var privateKeyObj = {};
+    var wallets = new Array;
+
+    // Save Each Object containing "private-key" = pkey into the array
     for (var i = 0; i < privateKeysArray.length; i++) {
-        privateKeyObj[i] = privateKeysArray[i];
+        var privateKeyObj = {};
+        privateKeyObj["private-key"] = privateKeysArray[i];
+        wallets.push(privateKeyObj);
     }
 
-    // TODO Curl to mock-identity-provider
-    var privateKeyJson = JSON.stringify(privateKeyObj);
+    sendToMockIdentityProvider(wallets);
+
+    var privateKeyJson = JSON.stringify(wallets);
     fs.writeFile('privatekeys.json', privateKeyJson);
 }
 
+function sendToMockIdentityProvider(wallets) {
+    axios.defaults.baseURL = process.env.MOCK_IDENTITY_PROVIDER;
+    var payload = {wallets};
+    axios.post('/wallets', payload)
+        .then(function (response) {
+            if (response.status == 202);
+            console.log('\x1b[32m', "Sucessfully sent private keys to " + axios.defaults.baseURL + "/wallets", '\x1b[0m');
+            //console.log(response.status);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
 
 function generateGenesisBlock(addressArray) {
     console.log('\x1b[32m', "Generating genesis block.", '\x1b[0m');

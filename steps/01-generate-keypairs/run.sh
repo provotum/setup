@@ -23,7 +23,8 @@ output=$(node steps/01-generate-keypairs/src/generateKeys.js);
 exitcode=$?;
 run_npm_install_first exitcode;
 
-echo ${output} >> $(pwd)/logs/01-generate-keypairs.log;
+echo ${output} >> $(pwd)/logs/output.log;
+
 echo "${output}";
 
 printf "${NORMAL}"

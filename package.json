@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/provotum/setup#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "dotenv": "^5.0.0"
   }
 }
