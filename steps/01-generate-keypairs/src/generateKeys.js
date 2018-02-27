@@ -1,5 +1,4 @@
 "use strict";
-
 require('dotenv').config();
 var fs = require("fs");
 var keythereum = require("keythereum");
@@ -7,7 +6,6 @@ var axios = require("axios");
 const password = "./password.sec";
 
 generateKeys();
-
 
 function generateKeys() {
 
@@ -31,7 +29,15 @@ function generateKeys() {
         //var keyObject = keythereum.dump(password, dk.privateKey, dk.salt, dk.iv);
         //keythereum.exportToFile(keyObject);
     }
+	
+	// Always push the five nodes from eth-private-net
+	addressArray.push("0x84BcC98723D58203741444B3B4D5660054c812E9");
+	addressArray.push("0x32b99e8d3F1A9af00DC742C2069DE3BabA183824");
+	addressArray.push("0x556fC148023B893f5d9A18513E33b8Ab0cBa57e7");
+	addressArray.push("0x9aAD167D1cABF4FE184FE47c3c30C0f7ae9c2f7c");
+	addressArray.push("0x8508453FFB53d5d50a0d3a91e41D5265846ffBa0");
 
+				
     generateJSONForIdentityProvider(privateKeysArray);
     generateGenesisBlock(addressArray);
 
@@ -73,21 +79,20 @@ function generateGenesisBlock(addressArray) {
 
     genesisObj.nonce = process.env.GENESIS_NONCE;
     genesisObj.mixhash = process.env.GENESIS_MIXHASH;
-    genesisObj.difficulty = process.env.GENESIS_NONCE
-    genesisObj.coinbase = process.env.GENESIS_NONCE;
+    genesisObj.difficulty = process.env.GENESIS_DIFFICULTY
+    genesisObj.coinbase = process.env.GENESIS_COINBASE;
     genesisObj.alloc = createPreAllocObject(addressArray);
     genesisObj.timestamp = process.env.GENESIS_TIMESTAMP;
     genesisObj.extradata = process.env.GENESIS_EXTRADATA;
     genesisObj.gaslimit = process.env.GENESIS_GASLIMIT;
     genesisObj.timestamp = process.env.GENESIS_TIMESTAMP;
     genesisObj.parentHash = process.env.GENESIS_PARENTHASH;
-    genesisObj.parentHash = process.env.GENESIS_PARENTHASH;
 
     var config = {};
-    config.chainId = process.env.GENESIS_CHAINID;
-    config.homesteadBlock = process.env.GENESIS_HOMESTEADBLOCK;
-    config.eip155Block = process.env.GENESIS_EIP155BLOCK;
-    config.eip158Block = process.env.GENESIS_EIP158BLOCK;
+    config.chainId = 15;
+    config.homesteadBlock = 0;
+    config.eip155Block = 0;
+    config.eip158Block = 0;
     genesisObj.config = config;
 
     var genesisJson = JSON.stringify(genesisObj);
