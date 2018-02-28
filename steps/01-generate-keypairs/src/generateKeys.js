@@ -11,6 +11,7 @@ function generateKeys() {
 
     if (process.env.NUMBER_OF_KEYS == undefined) {
         console.log('\x1b[31m', 'Something went wrong with dotenv .env', '\x1b[0m');
+        console.log('\x1b[31m', 'Make sure there is a .env file', '\x1b[0m');
         return;
     }
 
@@ -22,12 +23,6 @@ function generateKeys() {
         var readableAddress = keythereum.privateKeyToAddress(dk.privateKey);
         addressArray.push(readableAddress);
         privateKeysArray.push(dk.privateKey.toString('hex'));
-
-        // TODO Export the first 5 keystores to the individual folders for use with the eth-private-net
-        // TODO folders node1,node2,node3,node4,node5 in /resources/eth-private-net
-
-        //var keyObject = keythereum.dump(password, dk.privateKey, dk.salt, dk.iv);
-        //keythereum.exportToFile(keyObject);
     }
 	
     console.log('\x1b[36m', "Adding 5 nodes from eth-private-net to genesis block.", '\x1b[0m');
