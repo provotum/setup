@@ -16,8 +16,8 @@ function generateKeys() {
 
     var addressArray = new Array;
     var privateKeysArray = new Array;
+    console.log('\x1b[36m', "Generating ["+process.env.NUMBER_OF_KEYS+"] keys", '\x1b[0m');
     for (var i = 1; i <= process.env.NUMBER_OF_KEYS; i++) {
-        console.log('\x1b[32m', "Generating [" + i + "/" + process.env.NUMBER_OF_KEYS + "] keys", '\x1b[0m');
         var dk = keythereum.create();
         var readableAddress = keythereum.privateKeyToAddress(dk.privateKey);
         addressArray.push(readableAddress);
@@ -30,6 +30,8 @@ function generateKeys() {
         //keythereum.exportToFile(keyObject);
     }
 	
+    console.log('\x1b[36m', "Adding 5 nodes from eth-private-net to genesis block.", '\x1b[0m');
+
 	// Always push the five nodes from eth-private-net
 	addressArray.push("0x84BcC98723D58203741444B3B4D5660054c812E9");
 	addressArray.push("0x32b99e8d3F1A9af00DC742C2069DE3BabA183824");
@@ -65,16 +67,18 @@ function sendToMockIdentityProvider(wallets) {
     axios.post('/wallets', payload)
         .then(function (response) {
             if (response.status == 202);
-            console.log('\x1b[32m', "Sucessfully sent private keys to " + axios.defaults.baseURL + "/wallets", '\x1b[0m');
+            console.log('\x1b[36m', "Sucessfully sent private keys to " + axios.defaults.baseURL + "/wallets", '\x1b[0m');
             //console.log(response.status);
         })
         .catch(function (error) {
-            console.log(error);
+            console.log('\x1b[91m', "Coulnd't send private keys to http://localhost:8090, is your MOCK_IDENTITY_PROVIDER running?", '\x1b[0m');
+            process.exit(1);
+            // console.log(error);
         });
 }
 
 function generateGenesisBlock(addressArray) {
-    console.log('\x1b[32m', "Generating genesis block.", '\x1b[0m');
+    console.log('\x1b[36m', "Generating genesis block.", '\x1b[0m');
     var genesisObj = {};
 
     genesisObj.nonce = process.env.GENESIS_NONCE;

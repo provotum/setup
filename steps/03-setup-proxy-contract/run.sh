@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+GREEN=$(tput setaf 2)
+NORMAL=$(tput sgr0)
+
 function abort_if_geth_not_connected() {
     # $1 is the first argument passed to this function
     if [[ $1 = *"Could not connect to your Ethereum client"* ]]; then
@@ -37,7 +40,7 @@ abort_if_geth_not_connected "${output}"
 
 echo "Migrating (deploying) contracts. This may take a few minutes... ";
 
-output="$(truffle migrate)";
+output="$(truffle migrate --network provotum)";
 echo ${output} >> $(pwd)/../../logs/output.log;
 
 abort_if_geth_not_connected "${output}"
@@ -46,7 +49,7 @@ abort_if_geth_not_connected "${output}"
 regex=".*Proxy contract is deployed at ([a-zA-Z0-9]+).*"
 if [[ ${output} =~ $regex ]]; then
     address="${BASH_REMATCH[1]}"
-    echo "Proxy contract is deployed at ${address}."
+    echo "${GREEN}[Done]${NORMAL} Deployed proxy contract at ${address}."
 else
     echo "Failed to deploy proxy contract. See the logs in /logs/output.log for more details."
     exit 1;

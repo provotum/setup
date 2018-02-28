@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# ------------------------------------------------------------------
+# [Raphael Matile, Christian Killer] Setup Script
+#          For the setup of a demo election for provotum
+# ------------------------------------------------------------------
+
+BLUE=$(tput setaf 4)
+NORMAL=$(tput sgr0)
+GREEN=$(tput setaf 2)
 
 # Init log file
 rm logs/output.log
@@ -7,9 +15,9 @@ touch logs/output.log
 shopt -s nullglob
 for dir in steps/*/
 do
-    echo "#######################################"
-    echo "Executing step $dir"
-    echo "#######################################"
+	printf "${BLUE}#######################################\n";
+    echo "Executing $dir"
+    printf "${BLUE}#######################################\n${NORMAL}";
     ./${dir}/run.sh
 
     last_exit_status=$?
@@ -21,4 +29,4 @@ do
 done
 shopt -u nullglob #revert nullglob back to it's normal default state
 
-echo "Done"
+printf "${GREEN}[Done]" 
