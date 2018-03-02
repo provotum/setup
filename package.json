@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "devDependencies": {
+    "grunt": "^1.0.2",
     "keythereum": "^0.5.2"
   },
   "repository": {

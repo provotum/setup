@@ -20,5 +20,5 @@ echo "${output}";
     if [[ ${status} -ne "0" ]]; then
         exit ${status};
     fi
-    
+  
 printf "${NORMAL}"

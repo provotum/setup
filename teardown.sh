@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-(cd $(pwd)/resources/eth-private-net && bash teardown.sh);
+(cd $(pwd)/resources/poa-private-net && bash teardown.sh);
