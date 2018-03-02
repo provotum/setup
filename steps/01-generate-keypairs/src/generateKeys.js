@@ -12,6 +12,7 @@ function generateKeys() {
     if (process.env.NUMBER_OF_KEYS == undefined) {
         console.log('\x1b[31m', 'Something went wrong with dotenv .env', '\x1b[0m');
         console.log('\x1b[31m', 'Make sure there is a .env file', '\x1b[0m');
+        process.exit(1);
         return;
     }
 
