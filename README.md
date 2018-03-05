@@ -36,6 +36,11 @@ The following requirements must be installed / executed
 before invoking `setup.sh`.
 
 * As a starter, make sure you have the following things installed: `geth`, `go` and `npm`
+* The [backend](https://github.com/provotum/backend) is running on `http://localhost:8080`.
+* The [frontend](https://github.com/provotum/frontend) is running on `http://localhost:3000`.
+* The [frontend-voter](https://github.com/provotum/frontend-voter) is running on `http://localhost:3001`.
+* The `eth-netstats` will run on `http://localhost:3002` after ./setup sucessfully finished running.
+* The [mock-identity-provider](https://github.com/provotum/mock-identity-provider) is running on PORT 8090.
 * Install Truffle required for deploying contracts: `npm install -g truffle`
 
 Next, run 
@@ -44,16 +49,34 @@ Next, run
 ```
 You may be prompted to enter your password.
 
-# Invocation
+# Invocation (local)
 Invoke the setup script from the root directory: 
 ```bash
 ./setup.sh
 ```
 The most relevant output log can be tailed with `tail -f logs/output.log`.
 
+## Step 1
+The parameters for the election can be easily configured by directly editing `.env`in the project root.
+`NUMBER_OF_KEYS` defines the number of private keys that are generated and then distributed to the eligible voters by the mock identity provider. `MOCK_IDENTITY_PROVIDER` defines a hostname and port for the [mock-identity-provider](https://github.com/provotum/mock-identity-provider).
+The rest of `.env` are parameters (*e.g.* GENESIS_CONFIG_*) for the genesis block that is generated for the private network. 
+You should only change parameters if you know what you're doing. Else refer to [Genesis file explained](https://medium.com/taipei-ethereum-meetup/beginners-guide-to-ethereum-3-explain-the-genesis-file-and-use-it-to-customize-your-blockchain-552eb6265145). Be aware: `Puppeth` was used to generate the appropriate `extradata` in `genesis.json` and is currently hardcoded. 
+
+## Step 2
+The second step starts the private network with 5 pre-configured sealer nodes which are located in resources/poa-private-net/. 
+
+The main script is an adapted version of [`eth-private-net` by Vincent Chu](https://github.com/vincentchu/eth-private-net)
+The nodes are initialized with the previously generated genesis block. Then, the geth nodes are started with the parameters defined in `poa-private-net` on the RPC ports `8501`, `8502`, `8503`, `8504`,`8505`. 
+If `pm2` has been sucessfully installed and `npm install` & `grunt all` were sucessful, pm2 is started using provotum.json, pre-defining the 5 nodes. If you want to change anything in the 5 node setup, you need to regenerate the `.json` accordingly and also use puppeth to generate valid extradata. 
+After that, `eth-netstats` is started on `http://localhost:3002` and should display 5 functioning nodes. 
+
+## Step 3
+//TODO 
+
 # Shutting down
 Invoke the teardown script from the root directory: 
 ```bash
 ./teardown.sh
 ```
+
 
