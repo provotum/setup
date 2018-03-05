@@ -62,6 +62,13 @@ The parameters for the election can be easily configured by directly editing `.e
 The rest of `.env` are parameters (*e.g.* GENESIS_CONFIG_*) for the genesis block that is generated for the private network. 
 You should only change parameters if you know what you're doing. Else refer to [Genesis file explained](https://medium.com/taipei-ethereum-meetup/beginners-guide-to-ethereum-3-explain-the-genesis-file-and-use-it-to-customize-your-blockchain-552eb6265145). Be aware: `Puppeth` was used to generate the appropriate `extradata` in `genesis.json` and is currently hardcoded. 
 
+In short, step 1:
+* Generates `NUMBER_OF_KEYS` using [keythereum](https://github.com/ethereumjs/keythereum)
+* Sucessfully sent plain private keys to http://localhost:8090/wallets (else fails with `exit 1`)
+* Adds 5 nodes from poa-private-net to `genesis.json`
+* Generating genesis block using params from `.env`
+
+
 ## Step 2
 The second step starts the private network with 5 pre-configured sealer nodes which are located in resources/poa-private-net/. 
 
@@ -69,6 +76,11 @@ The main script is an adapted version of [`eth-private-net` by Vincent Chu](http
 The nodes are initialized with the previously generated genesis block. Then, the geth nodes are started with the parameters defined in `poa-private-net` on the RPC ports `8501`, `8502`, `8503`, `8504`,`8505`. 
 If `pm2` has been sucessfully installed and `npm install` & `grunt all` were sucessful, pm2 is started using provotum.json, pre-defining the 5 nodes. If you want to change anything in the 5 node setup, you need to regenerate the `.json` accordingly and also use puppeth to generate valid extradata. 
 After that, `eth-netstats` is started on `http://localhost:3002` and should display 5 functioning nodes. 
+
+In short, step 2:
+* Initialize and start 5 sealer geth nodes with previously generated `genesis.json`
+* Start communication from nodes to dashboard and display dashboard
+
 
 ## Step 3
 //TODO 
