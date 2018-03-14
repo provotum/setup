@@ -8,9 +8,11 @@ YELLOW=$(tput setaf 3)
 printf "${CYAN}Starting 5 nodes for a private network \n${NORMAL}"
 
 printf "${CYAN}Copying genesis.json over from pwd to resources/eth-private-net\n${NORMAL}"
-cp $(pwd)/genesis.json $(pwd)/resources/poa-private-net/
+#cp $(pwd)/genesis.json $(pwd)/resources/poa-private-net/
 
 printf "${CYAN}Starting bash eth-private-net \n${NORMAL}"
-(cd $(pwd)/resources/poa-private-net/ && bash ./run.sh);
+#(cd $(pwd)/resources/poa-private-net/ && bash ./run.sh);
 
 printf "${NORMAL}"
+
+exit 1;

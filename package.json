@@ -18,6 +18,10 @@
   "homepage": "https://github.com/provotum/setup#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "dotenv": "^5.0.0"
+    "dotenv": "^5.0.1",
+    "node-ssh": "^5.1.1",
+    "scp2": "^0.5.0",
+    "ssh-exec": "^2.0.0",
+    "step": "^1.0.0"
   }
 }
