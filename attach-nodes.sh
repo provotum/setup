@@ -12,12 +12,18 @@ function exec_via_ssh() {
 
 SSH_KEY="~/.ssh/poa"
 
-ENODES_INTERNAL[0]="@10.135.29.232:30300?discport=0"
-ENODES_INTERNAL[1]="@10.135.96.13:30300?discport=0"
-ENODES_INTERNAL[2]="@10.135.95.191:30300?discport=0"
-ENODES_INTERNAL[3]="@10.135.48.37:30300?discport=0"
-ENODES_INTERNAL[4]="@10.135.75.26:30300?discport=0"
+ENODES_INT[0]="@10.135.29.232:30300?discport=0"
+ENODES_INT[1]="@10.135.96.13:30300?discport=0"
+ENODES_INT[2]="@10.135.95.191:30300?discport=0"
+ENODES_INT[3]="@10.135.48.37:30300?discport=0"
+ENODES_INT[4]="@10.135.75.26:30300?discport=0"
 #ORDER IS RELEVANT!!
+
+ENODES_EXT[0]="@46.101.98.114:30300?discport=0"
+ENODES_EXT[1]="@138.197.176.96:30300?discport=0"
+ENODES_EXT[2]="@159.65.116.125:30300?discport=0"
+ENODES_EXT[3]="@138.68.89.116:30300?discport=0"
+ENODES_EXT[4]="@138.68.86.102:30300?discport=0"
 
 SEALER_NODES_ARR[0]="sealer01.provotum.ch"
 SEALER_NODES_ARR[1]="sealer02.provotum.ch"
@@ -49,39 +55,37 @@ for((i=0;i<5;i++));do
   #echo ${#enodes[@]}
   # create for loop that iterates through ENODE and creates new cut string
   #curr_enode_string=$(entry)
-  echo $i
-  printf '%s\n' "CURRENT PRE CUT ENODE STRING:" "${enodes[$i]}"
+  #echo $i
+  #printf '%s\n' "CURRENT PRE CUT ENODE STRING:" "${enodes[$i]}"
     #ip=$( echo "$line" |cut -d\: -f1 )
 
 
-#$ var="She favors the bold.  That's cold."
-#$ echo "${var//b??d/mold}"
-  echo "BEGIN ECHO TEST"
+  #$ var="She favors the bold.  That's cold."
+  #$ echo "${var//b??d/mold}"
+  #echo "BEGIN ECHO TEST"
   #echo_var=${enodes_internal[$i]}
   #echo "${enodes[$i]//@*0/$echo_var}"
-  echo "${enodes[$i]//@*0/${ENODES_INTERNAL[$i]}}"
-  echo "END ECHO TEST"
+  #echo "${enodes[$i]//@*0/${ENODES_INTERNAL[$i]}}"
+  #echo "END ECHO TEST"
   #cut_enode_string=$(echo "$str" | cut -f 1 -d'@')
   #cut_enode_string=$(echo "$enodes[$i]" | cut -f 1 -d'@')
   # doesnt assign variable correctly  
   #printf '%s\n' "CURRENT POST CUT ENODE STRING:" "${cut_enode_string}"
   #"cut apart from @[::]:30300?discport=0"
   #enode_cut+=("$cut_enode_string")
-  ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_INTERNAL[$i]}}")
+  ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_INT[$i]}}")
 
 
   #unset cut_enode_string
-  printf '%s\n' "FULL ARRAY (enodes):" "${enodes[@]}"
-  printf '%s\n' "FULL ARRAY (enode_cut):" "${enode_cut[@]}"
+  #printf '%s\n' "FULL ARRAY (enodes):" "${enodes[@]}"
   # needs another for loop that attaches @INTERNAL_IP:30300?discport=0
   #enode_final+=
-
   # append IP
-
   # then, loop through sealer nodes again to add all the ENODES that were collected and prepared.
   # then, check net.peerCount
 done
 
+printf '%s\n' "FULL ARRAY (enode_cut):" "${enode_cut[@]}"
 
 
 # Iterate through Sealer Nodes and add 
@@ -97,8 +101,6 @@ for((i=0;i<5;i++));do
 		
 		final_cmd="$cmd_begin$cmd_middle$cmd_end"
 		echo $final_cmd
-
-		# echo $string;
 
     	if [[ $i -ne $j ]]; then
 	        cmd="geth --exec=${final_cmd} attach /home/authority/provotum/node/geth.ipc"

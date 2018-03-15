@@ -1,0 +1,4 @@
+eth.sendTransaction({from:eth.coinbase, to:eth.accounts[1], value: web3.toWei(0.05, "ether")})
+
+
+geth --datadir=/home/authority/provotum/node/ --identity=sealer01 --port=30300 --rpc --rpccorsdomain=* --rpcapi admin,net,eth,web3,miner,personal --rpcport=8500 --networkid=15 --preload=/home/authority/provotum/identities.js --bootnodes enode://a349b003327c3075b779715a733d5076b986aae0225c48a760cd2b0e768b9654c0179014353ebb34eb0b9e7654caf69ec56d80b1b32705277bad953fb7777585@46.101.98.114:30301 --nodiscover --verbosity=6 --unlock 0 --password /home/authority/provotum/password.sec --mine --nat extip:10.135.29.232

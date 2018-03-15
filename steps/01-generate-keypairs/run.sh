@@ -20,6 +20,18 @@ sealer03.provotum.ch
 sealer04.provotum.ch
 sealer05.provotum.ch"
 
+EXT_IP[0]="46.101.98.114"
+EXT_IP[1]="138.197.176.96"
+EXT_IP[2]="159.65.116.125"
+EXT_IP[3]="138.68.89.116"
+EXT_IP[4]="138.68.86.102"	
+
+INT_IP[0]="10.135.29.232"
+INT_IP[1]="10.135.96.13"
+INT_IP[2]="10.135.95.191"
+INT_IP[3]="10.135.48.37"
+INT_IP[4]="10.135.75.26"
+
 SSH_KEY="~/.ssh/poa"
 LOCAL_GENESIS="genesis.json"
 LOCAL_BOOT_KEY="$(pwd)/resources/poa-private-net/boot.key"
@@ -67,8 +79,8 @@ for entry in $SEALERS; do
   printf "${CYAN} → $entry \n${NORMAL}"
   ssh -i $SSH_KEY authority@$entry "sudo killall -q --signal SIGINT geth";
   ssh -i $SSH_KEY authority@$entry "sudo pkill -INT geth";
-  ssh -i $SSH_KEY authority@$entry "sudo killall -q --signal SIGINT bootnode";
-  ssh -i $SSH_KEY authority@$entry "sudo pkill -INT bootnode";
+  #ssh -i $SSH_KEY authority@$entry "sudo killall -q --signal SIGINT bootnode";
+  #ssh -i $SSH_KEY authority@$entry "sudo pkill -INT bootnode";
 done
 printf "${GREEN} ✔ Killed all running geth instances on the sealer nodes \n${NORMAL}"
 
@@ -123,7 +135,7 @@ fi
 printf "${CYAN} Starting bootnode on sealer01 \n${NORMAL}"
   printf "${CYAN} → sealer01.provotum.ch \n${NORMAL}"
   scp -i $SSH_KEY $LOCAL_BOOTNODE_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_BOOTNODE_SCRIPT;
-  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/start-bootnode.sh; /home/authority/provotum/start-bootnode.sh";
+  #ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/start-bootnode.sh; /home/authority/provotum/start-bootnode.sh";
   #bootnode -nodekey /home/authority/provotum/boot.key -verbosity 9 -addr :30310 2>&1 & 2>&1 &";
 if [[ $? -ne "1" ]]; then
         printf "${GREEN} ✔ Started bootnode on sealer01 \n${NORMAL}"
@@ -131,13 +143,21 @@ fi
 
 # Starting geth on all sealers using the correct configuration
 printf "${CYAN} Starting geth \n${NORMAL}"
+
+COUNTER=0
 for entry in $SEALERS; do
   NODENAME=$(echo "$entry"|cut -f1 -d.);
+  EXTERNAL_IP=${EXT_IP[$COUNTER]}
+
+  # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
+  echo "$COUNTER";
+  echo "$EXTERNAL_IP";
   printf "${CYAN} → NODENAME: $NODENAME \n${NORMAL}"
   printf "${CYAN} → $entry:$BASE_PORT/:$BASE_RPC_PORT \n${NORMAL}"
   #ssh -i $SSH_KEY authority@$entry "geth --datadir=./provotum/node --identity=$NODENAME --port=$BASE_PORT --rpc --rpccorsdomain='*' --rpcapi admin,net,eth,web3,miner,personal --rpcport=$BASE_RPC_PORT $FLAGS $DEV_FLAGS > ./provotum/node/console.log &";
-  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/run-geth.sh; /home/authority/provotum/run-geth.sh $NODENAME";
+  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/run-geth.sh; /home/authority/provotum/run-geth.sh $NODENAME $EXTERNAL_IP";
   #ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/attach-nodes.sh; /home/authority/provotum/attach-nodes.sh";
+  COUNTER=$[$COUNTER +1]
 done
 if [[ $? -ne "1" ]]; then
         printf "${GREEN} ✔ Started geth \n${NORMAL}"
@@ -153,5 +173,5 @@ fi
 #        printf "${GREEN} ✔ Got IPs \n${NORMAL}"
 #fi
 
-
+bash attach-nodes.sh;
 
