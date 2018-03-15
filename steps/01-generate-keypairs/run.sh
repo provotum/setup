@@ -6,7 +6,7 @@ NORMAL=$(tput sgr0)
 CYAN=$(tput setaf 6)
 
 IDENTITIES=(sealer01 sealer02 sealer03 sealer04 sealer05)
-FLAGS='--networkid=15 --preload=./provotum/identities.js'
+FLAGS='--networkid=187 --preload=./provotum/identities.js'
 DEV_FLAGS='--bootnodes 'enode://a349b003327c3075b779715a733d5076b986aae0225c48a760cd2b0e768b9654c0179014353ebb34eb0b9e7654caf69ec56d80b1b32705277bad953fb7777585@10.135.29.232:30310' --nodiscover --verbosity=4 --unlock 0 --password ./provotum/password.sec --mine --nat=none'
 BASE_PORT=30300
 BASE_RPC_PORT=8500
@@ -20,11 +20,11 @@ sealer03.provotum.ch
 sealer04.provotum.ch
 sealer05.provotum.ch"
 
-EXT_IP[0]="46.101.98.114"
-EXT_IP[1]="138.197.176.96"
-EXT_IP[2]="159.65.116.125"
-EXT_IP[3]="138.68.89.116"
-EXT_IP[4]="138.68.86.102"	
+#EXT_IP[0]="46.101.98.114"
+#EXT_IP[1]="138.197.176.96"
+#EXT_IP[2]="159.65.116.125"
+#EXT_IP[3]="138.68.89.116"
+#EXT_IP[4]="138.68.86.102"	
 
 INT_IP[0]="10.135.29.232"
 INT_IP[1]="10.135.96.13"
@@ -147,7 +147,7 @@ printf "${CYAN} Starting geth \n${NORMAL}"
 COUNTER=0
 for entry in $SEALERS; do
   NODENAME=$(echo "$entry"|cut -f1 -d.);
-  EXTERNAL_IP=${EXT_IP[$COUNTER]}
+  EXTERNAL_IP=${INT_IP[$COUNTER]}
 
   # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
   echo "$COUNTER";
@@ -174,4 +174,6 @@ fi
 #fi
 
 bash attach-nodes.sh;
-
+#ssh -i $SSH_KEY authority@sealer01.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";
+#ssh -i $SSH_KEY authority@sealer02.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";
+#ssh -i $SSH_KEY authority@sealer03.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";

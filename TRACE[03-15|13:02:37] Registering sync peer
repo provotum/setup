@@ -1,0 +1,91 @@
+TRACE[03-15|13:02:37] Registering sync peer                    peer=6c8d5ad9f798ede5
+DEBUG[03-15|13:02:37] Relaxed downloader QoS values            rtt=20s confidence=0.333 ttl=1m0s
+DEBUG[03-15|13:02:38] Adding static node                       node="enode://f26f9b43bae5ff8018a723f714f045f55d74a438abf7f043a71c7bf758ebd7fbfa2d31f9bd8f74e06e1d6b0744476013f0a7bf324e06235881a3c1f29fbdad91@10.135.75.26:30300?discport=0"
+TRACE[03-15|13:02:38] New dial task                            task="staticdial f26f9b43bae5ff80 10.135.75.26:30300"
+DEBUG[03-15|13:02:38] Adding p2p peer                          id=f26f9b43bae5ff80 name=Geth/sealer05/v1.7.3...                                  addr=10.135.75.26:30300  peers=4
+TRACE[03-15|13:02:38] Dial task done                           task="staticdial f26f9b43bae5ff80 10.135.75.26:30300"
+TRACE[03-15|13:02:38] Starting protocol eth/63                 id=f26f9b43bae5ff80 conn=staticdial
+DEBUG[03-15|13:02:38] Ethereum peer connected                  id=f26f9b43bae5ff80 conn=staticdial name=Geth/sealer05/v1.7.3-stable-4bb3c89d/linux-amd64/go1.9.2
+TRACE[03-15|13:02:38] Registering sync peer                    peer=f26f9b43bae5ff80
+DEBUG[03-15|13:02:38] Relaxed downloader QoS values            rtt=20s confidence=0.250 ttl=1m0s
+DEBUG[03-15|13:02:48] Recalculated downloader QoS values       rtt=20s confidence=0.625 ttl=1m0s
+INFO [03-15|13:02:52] Transaction pool price threshold updated price=18000000000
+INFO [03-15|13:02:52] Starting mining operation
+INFO [03-15|13:02:52] Commit new mining work                   number=1 txs=0 uncles=0 elapsed=205.437µs
+TRACE[03-15|13:02:52] Waiting for slot to sign and propagate   delay=-99.476ms
+INFO [03-15|13:02:52] Successfully sealed new block            number=1 hash=4c706b…3edb3c
+DEBUG[03-15|13:02:52] Trie cache stats after commit            misses=14 unloads=0
+INFO [03-15|13:02:52] 🔨 mined potential block                  number=1 hash=4c706b…3edb3c
+DEBUG[03-15|13:02:52] Reinjecting stale transactions           count=0
+TRACE[03-15|13:02:52] Propagated block                         hash=4c706b…3edb3c recipients=2 duration=2562047h47m16.854s
+INFO [03-15|13:02:52] Commit new mining work                   number=2 txs=0 uncles=0 elapsed=601.597µs
+INFO [03-15|13:02:52] Signed recently, must wait for others
+TRACE[03-15|13:02:52] Announced block                          hash=4c706b…3edb3c recipients=2 duration=2562047h47m16.854s
+DEBUG[03-15|13:02:52] Queued propagated block                  peer=6c8d5ad9f798ede5 number=1 hash=b88988…21011c queued=1
+DEBUG[03-15|13:02:52] Importing propagated block               peer=6c8d5ad9f798ede5 number=1 hash=b88988…21011c
+WARN [03-15|13:02:52] Discarded bad propagated block           number=1 hash=b88988…21011c
+TRACE[03-15|13:02:52] Propagated block                         hash=b88988…21011c recipients=1 duration=848.472µs
+DEBUG[03-15|13:02:52] Queued propagated block                  peer=3869118cfc562f9e number=1 hash=b88988…21011c queued=1
+DEBUG[03-15|13:02:52] Importing propagated block               peer=3869118cfc562f9e number=1 hash=b88988…21011c
+WARN [03-15|13:02:52] Discarded bad propagated block           number=1 hash=b88988…21011c
+TRACE[03-15|13:02:52] Propagated block                         hash=b88988…21011c recipients=0 duration=370.18µs
+DEBUG[03-15|13:02:53] Queued propagated block                  peer=3869118cfc562f9e number=1 hash=dffae0…4fe644 queued=1
+DEBUG[03-15|13:02:53] Importing propagated block               peer=3869118cfc562f9e number=1 hash=dffae0…4fe644
+WARN [03-15|13:02:54] Discarded bad propagated block           number=1 hash=dffae0…4fe644
+TRACE[03-15|13:02:54] Propagated block                         hash=dffae0…4fe644 recipients=1 duration=1.629ms
+DEBUG[03-15|13:02:54] Queued propagated block                  peer=05eb0ebc7dec7aa9 number=1 hash=dffae0…4fe644 queued=1
+DEBUG[03-15|13:02:54] Importing propagated block               peer=05eb0ebc7dec7aa9 number=1 hash=dffae0…4fe644
+WARN [03-15|13:02:54] Discarded bad propagated block           number=1 hash=dffae0…4fe644
+TRACE[03-15|13:02:54] Propagated block                         hash=dffae0…4fe644 recipients=1 duration=739.317µs
+TRACE[03-15|13:03:05] Dial task done                           task="wait for dial hist expire (29.999994993s)"
+TRACE[03-15|13:03:05] New dial task                            task="wait for dial hist expire (660.45357ms)"
+TRACE[03-15|13:03:06] Dial task done                           task="wait for dial hist expire (660.45357ms)"
+TRACE[03-15|13:03:06] New dial task                            task="wait for dial hist expire (702.908968ms)"
+TRACE[03-15|13:03:07] Dial task done                           task="wait for dial hist expire (702.908968ms)"
+TRACE[03-15|13:03:07] New dial task                            task="wait for dial hist expire (700.379857ms)"
+TRACE[03-15|13:03:08] Dial task done                           task="wait for dial hist expire (700.379857ms)"
+DEBUG[03-15|13:03:08] Recalculated downloader QoS values       rtt=20s confidence=0.812 ttl=1m0s
+DEBUG[03-15|13:03:28] Recalculated downloader QoS values       rtt=20s confidence=0.906 ttl=1m0s
+DEBUG[03-15|13:03:48] Recalculated downloader QoS values       rtt=20s confidence=0.953 ttl=1m0s
+DEBUG[03-15|13:04:08] Recalculated downloader QoS values       rtt=20s confidence=0.977 ttl=1m0s
+DEBUG[03-15|13:04:28] Recalculated downloader QoS values       rtt=20s confidence=0.988 ttl=1m0s
+DEBUG[03-15|13:04:48] Recalculated downloader QoS values       rtt=20s confidence=0.994 ttl=1m0s
+DEBUG[03-15|13:05:08] Recalculated downloader QoS values       rtt=20s confidence=0.997 ttl=1m0s
+DEBUG[03-15|13:05:28] Recalculated downloader QoS values       rtt=20s confidence=0.999 ttl=1m0s
+DEBUG[03-15|13:05:48] Recalculated downloader QoS values       rtt=20s confidence=0.999 ttl=1m0s
+DEBUG[03-15|13:06:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:06:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:06:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:07:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:07:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:07:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:08:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:08:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:08:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:09:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:09:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:09:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:10:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:10:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:10:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:11:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:11:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:11:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:12:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:12:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:12:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:13:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:13:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:13:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:14:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:14:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:14:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:15:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:15:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:15:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:16:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:16:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:16:48] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+DEBUG[03-15|13:17:08] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s
+TRACE[03-15|13:17:28] Refreshing port mapping                  proto=tcp extport=30300 intport=30300 interface=ExtIP(10.135.29.232)
+DEBUG[03-15|13:17:28] Recalculated downloader QoS values       rtt=20s confidence=1.000 ttl=1m0s

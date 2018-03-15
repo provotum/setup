@@ -1,6 +1,4 @@
 #/bin/bash
-SCRIPT=$(basename "$0")
-
 SEALERS="sealer01.provotum.ch
 sealer02.provotum.ch
 sealer03.provotum.ch

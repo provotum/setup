@@ -91,7 +91,10 @@ function createPreAllocObject(addressArray) {
 
 
 function generateGenesisBlock(addressArray) {
-    console.log('\x1b[36m', "Generating genesis block.", '\x1b[0m');
+
+
+    if(process.env.ALGORITHM == "POA"){
+    console.log('\x1b[36m', "Generating ", '\x1b[37m', "["+process.env.ALGORITHM+"]",'\x1b[36m'," genesis block.", '\x1b[0m');
     var genesisObj = {};
 
     var clique = {};
@@ -126,6 +129,34 @@ function generateGenesisBlock(addressArray) {
     var genesisJson = JSON.stringify(genesisObj);
     fs.writeFile('genesis.json', genesisJson);
 
+    }
+
+    if(process.env.ALGORITHM == "POW"){
+        console.log('\x1b[36m', "Generating ", '\x1b[37m', "["+process.env.ALGORITHM+"]",'\x1b[36m'," genesis block.", '\x1b[0m');
+        var genesisObj = {};
+
+        var config = {};
+        config.chainId = parseInt(process.env.GENESIS_CONFIG_CHAINID);
+
+        config.homesteadBlock = 0;
+        config.eip155Block = 0;
+        config.eip158Block = 0;
+        genesisObj.config = config;
+
+        genesisObj.nonce = "0x0000000000000042";
+        genesisObj.timestamp = "0x00";
+        genesisObj.extradata = "";
+        genesisObj.gaslimit = "0xffffffff";
+        genesisObj.difficulty = "0x20";
+        genesisObj.mixhash = "0x0000000000000000000000000000000000000000000000000000000000000000";
+        genesisObj.coinbase = "0x0000000000000000000000000000000000000000";
+        genesisObj.alloc = createPreAllocObject(addressArray);
+        genesisObj.parentHash = process.env.GENESIS_PARENTHASH;
+
+        var genesisJson = JSON.stringify(genesisObj);
+        fs.writeFile('genesis.json', genesisJson);
+
+    }
 
     /*  var cmndArr = new Array();
     //cmndArr.push('rm -rf /home/authority/provotum/*');
