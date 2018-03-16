@@ -20,6 +20,13 @@ sealer03.provotum.ch
 sealer04.provotum.ch
 sealer05.provotum.ch"
 
+BOOTNODE="sealer01.provotum.ch
+sealer02.provotum.ch"
+
+SLAVES="sealer03.provotum.ch
+sealer04.provotum.ch
+sealer05.provotum.ch"
+
 #EXT_IP[0]="46.101.98.114"
 #EXT_IP[1]="138.197.176.96"
 #EXT_IP[2]="159.65.116.125"
@@ -37,6 +44,7 @@ LOCAL_GENESIS="genesis.json"
 LOCAL_BOOT_KEY="$(pwd)/resources/poa-private-net/boot.key"
 LOCAL_IDENTITIES="$(pwd)/resources/poa-private-net/identities.js"
 LOCAL_RUN_GETH_SCRIPT="$(pwd)/run-geth.sh"
+LOCAL_RUN_GETH_WITH_MINE_SCRIPT="$(pwd)/run-geth-with-mine.sh"
 LOCAL_RUN_ATTACH_NODES_SCRIPT="$(pwd)/attach-nodes.sh"
 LOCAL_BOOTNODE_SCRIPT="$(pwd)/start-bootnode.sh"
 
@@ -44,6 +52,7 @@ SCP_DEPLOY_TARGET_GENESIS="provotum/genesis.json"
 SCP_DEPLOY_TARGET_BOOT_KEY="provotum/boot.key"
 SCP_DEPLOY_TARGET_IDENTITIES="provotum/identities.js"
 SCP_DEPLOY_TARGET_RUN_GETH_SCRIPT="provotum/run-geth.sh"
+SCP_DEPLOY_TARGET_RUN_GETH_WITH_MINE_SCRIPT="provotum/run-geth-with-mine.sh"
 SCP_DEPLOY_TARGET_BOOTNODE_SCRIPT="provotum/start-bootnode.sh"
 
 DEPLOY_TARGET_BOOT_KEY="/home/authority/provotum/boot.key"
@@ -108,6 +117,7 @@ for entry in $SEALERS; do
   scp -i $SSH_KEY $LOCAL_BOOT_KEY authority@$entry:~/$SCP_DEPLOY_TARGET_BOOT_KEY;
   scp -i $SSH_KEY $LOCAL_IDENTITIES authority@$entry:~/$SCP_DEPLOY_TARGET_IDENTITIES;
   scp -i $SSH_KEY $LOCAL_RUN_GETH_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_RUN_GETH_SCRIPT;
+  scp -i $SSH_KEY $LOCAL_RUN_GETH_WITH_MINE_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_RUN_GETH_WITH_MINE_SCRIPT;
 done
 
 #printf "${CYAN} Starting ufw with rulesets \n${NORMAL}"
@@ -145,23 +155,44 @@ fi
 printf "${CYAN} Starting geth \n${NORMAL}"
 
 COUNTER=0
-for entry in $SEALERS; do
+for entry in $BOOTNODE; do
   NODENAME=$(echo "$entry"|cut -f1 -d.);
   EXTERNAL_IP=${INT_IP[$COUNTER]}
-
   # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
   echo "$COUNTER";
   echo "$EXTERNAL_IP";
   printf "${CYAN} → NODENAME: $NODENAME \n${NORMAL}"
   printf "${CYAN} → $entry:$BASE_PORT/:$BASE_RPC_PORT \n${NORMAL}"
-  #ssh -i $SSH_KEY authority@$entry "geth --datadir=./provotum/node --identity=$NODENAME --port=$BASE_PORT --rpc --rpccorsdomain='*' --rpcapi admin,net,eth,web3,miner,personal --rpcport=$BASE_RPC_PORT $FLAGS $DEV_FLAGS > ./provotum/node/console.log &";
-  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/run-geth.sh; /home/authority/provotum/run-geth.sh $NODENAME $EXTERNAL_IP";
-  #ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/attach-nodes.sh; /home/authority/provotum/attach-nodes.sh";
+  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/run-geth-with-mine.sh; /home/authority/provotum/run-geth-with-mine.sh $NODENAME $EXTERNAL_IP";
   COUNTER=$[$COUNTER +1]
 done
 if [[ $? -ne "1" ]]; then
-        printf "${GREEN} ✔ Started geth \n${NORMAL}"
+        printf "${GREEN} ✔ Started bootnode \n${NORMAL}"
 fi
+
+printf "${GREEN} Sleeping 10 \n${NORMAL}"
+sleep 5;
+
+#ssh -i $SSH_KEY authority@sealer01.provotum.ch "geth --exec='miner.start(1)' attach http://localhost:8500";
+#sleep 8;
+
+COUNTER=2
+for entry in $SLAVES; do
+  NODENAME=$(echo "$entry"|cut -f1 -d.);
+  EXTERNAL_IP=${INT_IP[$COUNTER]}
+  # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
+  echo "$COUNTER";
+  echo "$EXTERNAL_IP";
+  printf "${CYAN} → NODENAME: $NODENAME \n${NORMAL}"
+  printf "${CYAN} → $entry:$BASE_PORT/:$BASE_RPC_PORT \n${NORMAL}"
+  ssh -i $SSH_KEY authority@$entry "sudo chmod +x /home/authority/provotum/run-geth.sh; /home/authority/provotum/run-geth.sh $NODENAME $EXTERNAL_IP";
+  COUNTER=$[$COUNTER +1]
+  sleep 10;
+done
+if [[ $? -ne "1" ]]; then
+        printf "${GREEN} ✔ Started geth on SLAVES \n${NORMAL}"
+fi
+
 
 #printf "${CYAN} Connecting sealer01 with sealer02 \n${NORMAL}"
 # save IP into variable, then get enode ID

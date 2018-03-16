@@ -115,7 +115,8 @@ function generateGenesisBlock(addressArray) {
 
     genesisObj.nonce = process.env.GENESIS_NONCE;
     genesisObj.timestamp = process.env.GENESIS_TIMESTAMP;
-    genesisObj.extradata = process.env.GENESIS_EXTRADATA;
+    //genesisObj.extradata = process.env.GENESIS_EXTRADATA_FIVE_SEALERS;
+    genesisObj.extradata = process.env.GENESIS_EXTRADATA_TWO_SEALERS;
     genesisObj.gaslimit = process.env.GENESIS_GASLIMIT;
     genesisObj.difficulty = process.env.GENESIS_DIFFICULTY
     genesisObj.mixhash = process.env.GENESIS_MIXHASH;
