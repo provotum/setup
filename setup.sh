@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ------------------------------------------------------------------
 # [Raphael Matile, Christian Killer] Setup Script
-#          For the setup of a demo election for provotum
+# For the setup of a demo election for provotum
 # ------------------------------------------------------------------
 
 BLUE=$(tput setaf 4)

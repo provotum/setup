@@ -27,12 +27,6 @@ SLAVES="sealer03.provotum.ch
 sealer04.provotum.ch
 sealer05.provotum.ch"
 
-#EXT_IP[0]="46.101.98.114"
-#EXT_IP[1]="138.197.176.96"
-#EXT_IP[2]="159.65.116.125"
-#EXT_IP[3]="138.68.89.116"
-#EXT_IP[4]="138.68.86.102"	
-
 INT_IP[0]="10.135.29.232"
 INT_IP[1]="10.135.96.13"
 INT_IP[2]="10.135.95.191"
@@ -62,7 +56,6 @@ DEPLOY_TARGET_CHAINDATA="/home/authority/provotum/node/geth/*"
 DEPLOY_TARGET_INIT_LOG="/home/authority/provotum/node/init.log"
 DEPLOY_TARGET_CONSOLE_LOG="/home/authority/provotum/node/console.log"
 
-
 # Clean up before starting
 rm -rf $(pwd)/genesis.json;
 rm -rf $(pwd)/privatekeys.json;
@@ -72,17 +65,12 @@ printf "${CYAN}Generating keys using keythereum \n${NORMAL}"
 output=$(node --no-deprecation steps/01-generate-keypairs/src/generateKeys.js);
 status=$?;
 
-
 echo ${output} >> $(pwd)/logs/output.log;
 echo "${output}";
-
     if [[ ${status} -ne "0" ]]; then
         exit ${status};
     fi
 
-printf "${NORMAL}"
-
-# SSH to node, kill processes
 printf "${CYAN} Killing all running geth instances on the sealer nodes \n${NORMAL}"
 for entry in $SEALERS; do
   printf "${CYAN} → $entry \n${NORMAL}"
@@ -93,7 +81,7 @@ for entry in $SEALERS; do
 done
 printf "${GREEN} ✔ Killed all running geth instances on the sealer nodes \n${NORMAL}"
 
-# SSH to node, delete files
+# SSH to node, delete files from past blockchain
 printf "${CYAN} Deleting old files from the sealer nodes \n${NORMAL}"
 for entry in $SEALERS; do
   printf "${CYAN} → $entry \n${NORMAL}"
@@ -109,7 +97,6 @@ if [[ $? -ne "1" ]]; then
 printf "${GREEN} ✔ Deleted all old files \n${NORMAL}"
 fi
 
-# Copy over newly generated genesis.key and boot.key
 printf "${CYAN} SCP genesis.json and boot.key \n${NORMAL}"
 for entry in $SEALERS; do
   printf "${CYAN} → $entry \n${NORMAL}"
@@ -119,16 +106,6 @@ for entry in $SEALERS; do
   scp -i $SSH_KEY $LOCAL_RUN_GETH_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_RUN_GETH_SCRIPT;
   scp -i $SSH_KEY $LOCAL_RUN_GETH_WITH_MINE_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_RUN_GETH_WITH_MINE_SCRIPT;
 done
-
-#printf "${CYAN} Starting ufw with rulesets \n${NORMAL}"
-#for entry in $SEALERS; do
-#  NODENAME=$(echo "$entry"|cut -f1 -d.);
-#  printf "${CYAN} → $entry ufw \n${NORMAL}"
-#    ssh -i $SSH_KEY authority@$entry "sudo ufw default allow outgoing; sudo ufw allow 22; sudo ufw allow ssh; sudo ufw allow 8500/tcp; sudo ufw allow 30300; sudo ufw allow 30301; sudo ufw allow from 255.255.0.0; sudo ufw enable;";
-#done
-#if [[ $? -ne "1" ]]; then
-#        printf "${GREEN} ✔ Started ufw \n${NORMAL}"
-#fi
 
 # Init all genesis blocks on all sealers
 printf "${CYAN} Initializing genesis.json \n${NORMAL}"
@@ -140,8 +117,6 @@ if [[ $? -ne "1" ]]; then
         printf "${GREEN} ✔ Initialized genesis.json \n${NORMAL}"
 fi
 
-# Start bootnode on sealer01
-# Init all genesis blocks on all sealers
 printf "${CYAN} Starting bootnode on sealer01 \n${NORMAL}"
   printf "${CYAN} → sealer01.provotum.ch \n${NORMAL}"
   scp -i $SSH_KEY $LOCAL_BOOTNODE_SCRIPT authority@$entry:~/$SCP_DEPLOY_TARGET_BOOTNODE_SCRIPT;
@@ -151,14 +126,11 @@ if [[ $? -ne "1" ]]; then
         printf "${GREEN} ✔ Started bootnode on sealer01 \n${NORMAL}"
 fi
 
-# Starting geth on all sealers using the correct configuration
-printf "${CYAN} Starting geth \n${NORMAL}"
-
+printf "${CYAN} Starting geth on $BOOTNODE \n${NORMAL}"
 COUNTER=0
 for entry in $BOOTNODE; do
   NODENAME=$(echo "$entry"|cut -f1 -d.);
   EXTERNAL_IP=${INT_IP[$COUNTER]}
-  # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
   echo "$COUNTER";
   echo "$EXTERNAL_IP";
   printf "${CYAN} → NODENAME: $NODENAME \n${NORMAL}"
@@ -173,14 +145,11 @@ fi
 printf "${GREEN} Sleeping 10 \n${NORMAL}"
 sleep 5;
 
-#ssh -i $SSH_KEY authority@sealer01.provotum.ch "geth --exec='miner.start(1)' attach http://localhost:8500";
-#sleep 8;
 
 COUNTER=2
 for entry in $SLAVES; do
   NODENAME=$(echo "$entry"|cut -f1 -d.);
   EXTERNAL_IP=${INT_IP[$COUNTER]}
-  # ENODE_CUT[$i]=$(echo "${enodes[$i]//@*0/${ENODES_EXT[$i]}}")
   echo "$COUNTER";
   echo "$EXTERNAL_IP";
   printf "${CYAN} → NODENAME: $NODENAME \n${NORMAL}"
@@ -190,21 +159,7 @@ for entry in $SLAVES; do
   sleep 10;
 done
 if [[ $? -ne "1" ]]; then
-        printf "${GREEN} ✔ Started geth on SLAVES \n${NORMAL}"
+        printf "${GREEN} ✔ Started geth on $SLAVES \n${NORMAL}"
 fi
 
-
-#printf "${CYAN} Connecting sealer01 with sealer02 \n${NORMAL}"
-# save IP into variable, then get enode ID
-#for entry in $SEALERS; do
-#INTERNAL_IP=$(ssh -i $SSH_KEY authority@$entry "ifconfig|grep inet|head -3|tail -1|sed 's/\:/ /'|(awk '{print \$3}')");
-#printf "${CYAN} ✔ $INTERNAL_IP \n${NORMAL}"
-#done
-#if [[ $? -ne "1" ]]; then
-#        printf "${GREEN} ✔ Got IPs \n${NORMAL}"
-#fi
-
 bash attach-nodes.sh;
-#ssh -i $SSH_KEY authority@sealer01.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";
-#ssh -i $SSH_KEY authority@sealer02.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";
-#ssh -i $SSH_KEY authority@sealer03.provotum.ch "geth --exec='miner.start()' attach http://localhost:8500";
