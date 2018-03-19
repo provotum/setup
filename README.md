@@ -1,13 +1,17 @@
-Setup
-=====
+## Important Note & Disclaimer
 
-This script generates all required preliminaries for a successful election.
-The setup script is divided into multiple substeps, which are
+- The **[master branch](https://github.com/provotum/setup/tree/master) contains the setup code for a local deployment on your machine**.
+- The **remote branch (you're here) contains setup code for a remote deployment on different servers; replace IP's and domain names accordingly.** 
+- **The code in this repository is highly experimental. Do not use it for anything security-critical. All usage at your own risk.**
 
-1. Generate a new PoA genesis block holding a fixed amount of pre-allocated accounts. Further, the corresonding private keys are sent to the Mock Identity provider you should be running on port 8090.
-2. Start a `poa-private-net` with 5 sealer nodes initializing with the previously generated genesis block. Also, `eth-net-intelligence-api` and `eth-netstats` is started to give an overview of the private network. 
-3. Deploy the Proxy contract, which keeps track of the latest ballot contract. 
+## Setup (**master**)
 
+This repository generates all required preliminaries for a successful election for you to run on a cloud or other remote server environment. The setup script is divided into multiple substeps, which are
+
+1. Generate a new genesis block holding a fixed amount of pre-allocated accounts. Further, the corresonding private keys are sent to the Mock Identity provider you should be running on the ip you defined in `.env`.
+2. Start a `poa-private-net` with 5 nodes in total (2 are authorized to seal) initializing with the previously generated genesis block. There are different helper scripts available. If you want to montitor the behaviour of youre network, you can use the `provotum.yml` file with tmuxinator and it will give you a good overview over logs and performance.
+
+// Continue here
 
 ```bash
 ├── README.md
@@ -18,7 +22,7 @@ The setup script is divided into multiple substeps, which are
 │   └── output.log # tail this
 ├── node_modules # contains relevant modules for step 01
 ├── package-lock.json
-├── package.json
+├── package.json 
 ├── privatekeys.json  # will be overwritten by steps/01-generate-keypairs every time ./setup is run
 ├── resources # contains the submodules
 │   ├── eth-contracts # smart contract submodule deploying proxy contract
@@ -27,10 +31,8 @@ The setup script is divided into multiple substeps, which are
 ├── steps
 │   ├── 01-generate-keypairs 
 │   ├── 02-start-eth-private-net
-│   └── 03-setup-proxy-contract
 └── teardown.sh # mainly tears down the private network & subsequently created / generated files and processes
 ```
-
 # Prerequisites
 The following requirements must be installed / executed 
 before invoking `setup.sh`.
@@ -41,7 +43,6 @@ before invoking `setup.sh`.
 * The [frontend-voter](https://github.com/provotum/frontend-voter) is running on `http://localhost:3001`.
 * The `eth-netstats` will run on `http://localhost:3002` after ./setup sucessfully finished running.
 * The [mock-identity-provider](https://github.com/provotum/mock-identity-provider) is running on PORT 8090.
-* Install Truffle required for deploying contracts: `npm install -g truffle`
 
 Next, run 
 ```bash
@@ -64,19 +65,14 @@ You should only change parameters if you know what you're doing. Else refer to [
 
 ## Step 2
 The second step starts the private network with 5 pre-configured sealer nodes which are located in resources/poa-private-net/. 
-
 The main script is an adapted version of [`eth-private-net` by Vincent Chu](https://github.com/vincentchu/eth-private-net)
 The nodes are initialized with the previously generated genesis block. Then, the geth nodes are started with the parameters defined in `poa-private-net` on the RPC ports `8501`, `8502`, `8503`, `8504`,`8505`. 
 If `pm2` has been sucessfully installed and `npm install` & `grunt all` were sucessful, pm2 is started using provotum.json, pre-defining the 5 nodes. If you want to change anything in the 5 node setup, you need to regenerate the `.json` accordingly and also use puppeth to generate valid extradata. 
 After that, `eth-netstats` is started on `http://localhost:3002` and should display 5 functioning nodes. 
-
-## Step 3
-//TODO 
 
 # Shutting down
 Invoke the teardown script from the root directory: 
 ```bash
 ./teardown.sh
 ```
-
 
