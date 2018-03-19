@@ -1,6 +1,3 @@
-[submodule "resources/eth-contracts"]
-	path = resources/eth-contracts
-	url = git@github.com:provotum/eth-contracts.git
 [submodule "resources/poa-private-net"]
 	path = resources/poa-private-net
 	url = git@github.com:provotum/poa-private-net.git

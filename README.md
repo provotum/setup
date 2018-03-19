@@ -6,7 +6,9 @@
 
 ## Setup (**master**)
 
-This repository generates all required preliminaries for a successful election for you to run on a cloud or other remote server environment. The setup script is divided into multiple substeps, which are
+This repository generates all required preliminaries for a successful election for you to run on a cloud or other remote server environment. The `./setup.sh` script basically invokes all the steps in `steps` (*e.g.* You could add a new folder `02-deploy-contracts` with a `run.sh` that deploys some contracts with truffle)
+
+However, the script in 
 
 1. Generate a new genesis block holding a fixed amount of pre-allocated accounts. Further, the corresonding private keys are sent to the Mock Identity provider you should be running on the ip you defined in `.env`.
 2. Start a `poa-private-net` with 5 nodes in total (2 are authorized to seal) initializing with the previously generated genesis block. There are different helper scripts available. If you want to montitor the behaviour of youre network, you can use the `provotum.yml` file with tmuxinator and it will give you a good overview over logs and performance.
@@ -14,37 +16,42 @@ This repository generates all required preliminaries for a successful election f
 // Continue here
 
 ```bash
+
+.
 ├── README.md
-├── clean.sh #just deletes genesis.json and privatekeys.json
-├── genesis.json # will be overwritten by steps/01-generate-keypairs every time ./setup is run
-├── install.sh # inits & updates submodules and installs all npm projects
+├── attach-nodes.sh # this script first gets all enode info from each node and then attaches all nodes to each other
+├── boot.key # this will be scp'd to node 1 since it's necessary to run the bootnode
+├── exec-on-sealers.sh # ./exec-on-sealers.sh 'ls' will execute ls on all servers using ssh and return results
+├── identities.js # contains all the identities for geth to preload them and easily assign
+├── install.sh # just some more convenient initializing and installing of submodules and the npm project for key generation
 ├── logs 
-│   └── output.log # tail this
-├── node_modules # contains relevant modules for step 01
 ├── package-lock.json
-├── package.json 
-├── privatekeys.json  # will be overwritten by steps/01-generate-keypairs every time ./setup is run
-├── resources # contains the submodules
-│   ├── eth-contracts # smart contract submodule deploying proxy contract
-│   └── poa-private-net # submodule containing a PoA 5 node private network
-├── setup.sh # runs steps 01 - 03
-├── steps
-│   ├── 01-generate-keypairs 
-│   ├── 02-start-eth-private-net
-└── teardown.sh # mainly tears down the private network & subsequently created / generated files and processes
+├── package.json
+├── resources 
+│   └── poa-private-net
+├── run-geth-with-mine.sh # will be scp'd to nodes 1 and 2 && will be run on the authorized nodes 1 and 2
+├── run-geth.sh # will be scp'd to nodes 3 - 5 and will be run on the nodes 3 - 5 
+├── setup.sh # main script, run this after ./install.sh to execute the setup
+├── start-bootnode.sh # script will be copied to node 1 and executed there since it's the bootnode
+└── steps
+    └── 01-deploy-poa-net
+        ├── run.sh # this will be invoked by ./setup and contains the main script relevant for remote deployment
+        └── src
+            ├── generateKeys.js # generates the private keys for votes, exports them and creates a genesis block pre-allocating those voter accounts
+            └── password.sec # eth.coinbase password for all nodes
 ```
 # Prerequisites
-The following requirements must be installed / executed 
-before invoking `setup.sh`.
+
+The following requirements must be installed / executed before invoking `setup.sh`.
+**Instead of using a placeholder domain, we use `provotum.ch`; where ever necessary replace with your domain.** 
 
 * As a starter, make sure you have the following things installed: `geth`, `go` and `npm`
-* The [backend](https://github.com/provotum/backend) is running on `http://localhost:8080`.
-* The [frontend](https://github.com/provotum/frontend) is running on `http://localhost:3000`.
-* The [frontend-voter](https://github.com/provotum/frontend-voter) is running on `http://localhost:3001`.
-* The `eth-netstats` will run on `http://localhost:3002` after ./setup sucessfully finished running.
-* The [mock-identity-provider](https://github.com/provotum/mock-identity-provider) is running on PORT 8090.
+* The [backend](https://github.com/provotum/backend) is running on `https://backend.provotum.ch:8080`
+* The [admin](https://github.com/provotum/admin) frontend is running on `https://admin.provotum.ch:3000`
+* The [frontend](https://github.com/provotum/frontend) is running on `https://vote.provotum.ch:3001`
+* The [mock-identity-provider](https://github.com/provotum/mock-identity-provider) is running on `https://id.provotum.ch:8090`
 
-Next, run 
+First of all, run 
 ```bash
 ./install.sh
 ```
@@ -55,24 +62,7 @@ Invoke the setup script from the root directory:
 ```bash
 ./setup.sh
 ```
-The most relevant output log can be tailed with `tail -f logs/output.log`.
 
-## Step 1
-The parameters for the election can be easily configured by directly editing `.env`in the project root.
-`NUMBER_OF_KEYS` defines the number of private keys that are generated and then distributed to the eligible voters by the mock identity provider. `MOCK_IDENTITY_PROVIDER` defines a hostname and port for the [mock-identity-provider](https://github.com/provotum/mock-identity-provider).
-The rest of `.env` are parameters (*e.g.* GENESIS_CONFIG_*) for the genesis block that is generated for the private network. 
-You should only change parameters if you know what you're doing. Else refer to [Genesis file explained](https://medium.com/taipei-ethereum-meetup/beginners-guide-to-ethereum-3-explain-the-genesis-file-and-use-it-to-customize-your-blockchain-552eb6265145). Be aware: `Puppeth` was used to generate the appropriate `extradata` in `genesis.json` and is currently hardcoded. 
+## `steps/01-deploy-poa-net/run.sh`
 
-## Step 2
-The second step starts the private network with 5 pre-configured sealer nodes which are located in resources/poa-private-net/. 
-The main script is an adapted version of [`eth-private-net` by Vincent Chu](https://github.com/vincentchu/eth-private-net)
-The nodes are initialized with the previously generated genesis block. Then, the geth nodes are started with the parameters defined in `poa-private-net` on the RPC ports `8501`, `8502`, `8503`, `8504`,`8505`. 
-If `pm2` has been sucessfully installed and `npm install` & `grunt all` were sucessful, pm2 is started using provotum.json, pre-defining the 5 nodes. If you want to change anything in the 5 node setup, you need to regenerate the `.json` accordingly and also use puppeth to generate valid extradata. 
-After that, `eth-netstats` is started on `http://localhost:3002` and should display 5 functioning nodes. 
-
-# Shutting down
-Invoke the teardown script from the root directory: 
-```bash
-./teardown.sh
-```
-
+// TODO
