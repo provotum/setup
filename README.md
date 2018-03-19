@@ -1,7 +1,7 @@
 ## Important Note & Disclaimer
 
-- The **master branch contains the setup code for a local deployment on your machine**.
-- The **remote branch contains setup code for a remote deployment on different servers; replace IP's and domain names accordingly.** 
+- The **master branch (you're here) contains the setup code for a local deployment on your machine**.
+- The **[remote branch](https://github.com/provotum/setup/tree/remote) contains setup code for a remote deployment on different servers; replace IP's and domain names accordingly.** 
 - **The code in this repository is highly experimental. Do not use it for anything security-critical. All usage at your own risk.**
 
 ## Setup (**master**)
