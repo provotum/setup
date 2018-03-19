@@ -4,7 +4,7 @@
 - The **remote branch (you're here) contains setup code for a remote deployment on different servers; replace IP's and domain names accordingly.** 
 - **The code in this repository is highly experimental. Do not use it for anything security-critical. All usage at your own risk.**
 
-## Setup (**master**)
+## Setup (**remote**)
 
 This repository generates all required preliminaries for a successful election for you to run on a cloud or other remote server environment. The `./setup.sh` script basically invokes all the steps in `steps` (*e.g.* You could add a new folder `02-deploy-contracts` with a `run.sh` that deploys some contracts with truffle)
 
@@ -13,11 +13,11 @@ However, the script in
 1. Generate a new genesis block holding a fixed amount of pre-allocated accounts. Further, the corresonding private keys are sent to the Mock Identity provider you should be running on the ip you defined in `.env`.
 2. Start a `poa-private-net` with 5 nodes in total (2 are authorized to seal) initializing with the previously generated genesis block. There are different helper scripts available. If you want to montitor the behaviour of youre network, you can use the `provotum.yml` file with tmuxinator and it will give you a good overview over logs and performance.
 
-// Continue here
 
 ```bash
 
 .
+├── .env # check this file to configure ./steps/01-deploy-poa-net/src/generateKeys.js
 ├── README.md
 ├── attach-nodes.sh # this script first gets all enode info from each node and then attaches all nodes to each other
 ├── boot.key # this will be scp'd to node 1 since it's necessary to run the bootnode
@@ -27,6 +27,7 @@ However, the script in
 ├── logs 
 ├── package-lock.json
 ├── package.json
+├── provotum.yaml # use tmuxinator to have a nice tmux session with 4 nodes geth logs / geth metrics
 ├── resources 
 │   └── poa-private-net
 ├── run-geth-with-mine.sh # will be scp'd to nodes 1 and 2 && will be run on the authorized nodes 1 and 2
@@ -65,4 +66,19 @@ Invoke the setup script from the root directory:
 
 ## `steps/01-deploy-poa-net/run.sh`
 
-// TODO
+This bash script executes every step in order to sucessfully start a proof-of-authority private network. 
+The sealer servers all have `geth 1.7.3 stable` installed and are `8 GB Memory / 25 GB Disk / Ubuntu 16.04.4 x64`. 
+Make sure you `sudo ufw allow $PORT` for your geth instances.
+Watch out `.env` is only used in the first step, where genesis.json and `privatekeys.json` is generated, the bash file `./steps/01-deploy-poa-net/run.sh` has all configuration at the top of the file; which then executes: 
+* Execute `node src/generateKeys.js` to generate `NUMBER_OF_KEYS` >> `privatekeys.json` and pre-alloc in `genesis.json`
+* Sendd `privatekeys.json` to `MOCK_IDENTITY_PROVIDER`
+* Kill all running geth / bootnode instances on nodes
+* Remove old files (chaindata, genesis.json)
+* SCP newly generated `genesis.json` and `boot.key` nodes
+* Initialize `genesis.json` on all nodes and start `bootnode` on node 1
+* Slowly start `run-get-with-mine.sh` on node 1 and 2
+* Start `run-geth.sh` on node 3 to 5
+* Now ssh to your node and tail -f `provotum/node/console.log`
+
+The script needs a lot of customization to work on your specific environment. 
+Feel free to contact us for support. 
