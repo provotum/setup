@@ -97,12 +97,12 @@ function generateGenesisBlock(addressArray) {
     var config = {};
     config.chainId = parseInt(process.env.GENESIS_CONFIG_CHAINID);
 
-    config.homesteadBlock = parseInt(process.env.GENESIS_CONFIG_HOMESTEADBLOCK);
-    config.eip150Block = parseInt(process.env.GENESIS_CONFIG_EIP150BLOCK);
-    config.eip150Hash = process.env.GENESIS_CONFIG_EIP150HASH;
-    config.eip155Block = parseInt(process.env.GENESIS_CONFIG_EIP155BLOCK);
-    config.eip158Block = parseInt(process.env.GENESIS_CONFIG_EIP158BLOCK);
-    config.byzantiumBlock = parseInt(process.env.GENESIS_CONFIG_BYZANTIUMBLOCK);
+    //config.homesteadBlock = parseInt(process.env.GENESIS_CONFIG_HOMESTEADBLOCK);
+    //config.eip150Block = parseInt(process.env.GENESIS_CONFIG_EIP150BLOCK);
+    //config.eip150Hash = process.env.GENESIS_CONFIG_EIP150HASH;
+    //config.eip155Block = parseInt(process.env.GENESIS_CONFIG_EIP155BLOCK);
+    //config.eip158Block = parseInt(process.env.GENESIS_CONFIG_EIP158BLOCK);
+    //config.byzantiumBlock = parseInt(process.env.GENESIS_CONFIG_BYZANTIUMBLOCK);
     config.clique = clique;
     genesisObj.config = config;
 
