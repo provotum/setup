@@ -1,0 +1,57 @@
+# ~/.tmuxinator/provotum.yml
+
+name: provotum
+root: ~/
+
+windows:
+  - sealer-geth-metrics:
+      layout: tiled
+      panes:
+        - sealer01_geth_metrics:
+          - ssh sealer01.provotum.ch
+          - clear
+          - sudo geth monitor --attach provotum/node/geth.ipc system/memory/allocs/Overall
+        - sealer02_geth_metrics:
+          - ssh sealer02.provotum.ch
+          - clear
+          - sudo geth monitor --attach provotum/node/geth.ipc system/memory/allocs/Overall
+        - sealer03_geth_metrics:
+          - ssh sealer03.provotum.ch
+          - clear
+          - sudo geth monitor --attach provotum/node/geth.ipc system/memory/allocs/Overall
+        - sealer04_geth_metrics:
+          - ssh sealer04.provotum.ch
+          - clear
+          - sudo geth monitor --attach provotum/node/geth.ipc system/memory/allocs/Overall
+  - sealer-geth-logs:
+      layout: tiled
+      panes:
+        - sealer01_geth_log:
+          - ssh sealer01.provotum.ch
+          - clear
+          - multitail -cS apache provotum/node/console.log
+        - sealer02_geth_log:
+          - ssh sealer02.provotum.ch
+          - clear
+          - multitail -cS apache provotum/node/console.log
+        - sealer03_geth_log:
+          - ssh sealer03.provotum.ch
+          - clear
+          - multitail -cS apache provotum/node/console.log
+        - sealer04_geth_log:
+          - ssh sealer04.provotum.ch
+          - clear
+          - multitail -cS apache provotum/node/console.log
+  - backend:
+      layout: tiled
+      panes:
+        - backend:
+          - ssh backend.provotum.ch
+          - tmux attach-session -t provotum-backend
+  - id-provider:
+      layout: tiled
+      panes:
+        - id-provider:
+          - ssh id.provotum.ch
+          - tmux attach-session -t id-provider
+
