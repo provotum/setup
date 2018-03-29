@@ -11,7 +11,7 @@ rm -rf $(pwd)/privatekeys.json;
 
 # calling key generation with node
 printf "${CYAN}Generating keys using keythereum \n${NORMAL}"
-output=$(node steps/01-generate-keypairs/src/generateKeys.js);
+output=$(node --no-deprecation steps/01-deploy-poa-net/src/generateKeys.js);
 status=$?;
 
 echo ${output} >> $(pwd)/logs/output.log;
