@@ -51,10 +51,10 @@ function generateJSONForIdentityProvider(privateKeysArray) {
         wallets.push(privateKeyObj);
     }
 
-    sendToMockIdentityProvider(wallets);
+    //sendToMockIdentityProvider(wallets);
 
     var privateKeyJson = JSON.stringify(wallets);
-    fs.writeFile('privatekeys.json', privateKeyJson);
+    fs.writeFile('privatekeys.json', privateKeyJson, {}, function () {});
 }
 
 function sendToMockIdentityProvider(wallets) {
@@ -107,7 +107,7 @@ function generateGenesisBlock(addressArray) {
 
     
     var genesisJson = JSON.stringify(genesisObj);
-    fs.writeFile('genesis.json', genesisJson);
+    fs.writeFile('genesis.json', genesisJson, {}, function () {});
 
 }
 
